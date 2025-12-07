@@ -14,6 +14,8 @@ const app= express()
 const port=process.env.PORT||4000;
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(cookieParser())
 app.use(express.json());
 /*app.use(session({
@@ -70,7 +72,9 @@ app.get("/",(req,res)=>{
 
 app.get("/login",(req,res)=>{
 
-    res.sendFile("/Users/ncvhome/Desktop/NodeApp/Project/public/login.html")
+    //res.sendFile("/Users/ncvhome/Desktop/NodeApp/Project/public/login.html")
+    return res.sendFile(path.join(__dirname, "public", "login.html"));
+
 })
 app.get("/logout",(req,res)=>{
         res.clearCookie("token")
@@ -114,7 +118,9 @@ app.post("/login",async(req,res)=>{
 })
 app.get("/register",(req,res)=>{
 
-        res.sendFile("/Users/ncvhome/Desktop/NodeApp/Project/public/register.html")
+        //res.sendFile("/Users/ncvhome/Desktop/NodeApp/Project/public/register.html")
+        res.sendFile(path.join(__dirname, "public", "register.html"));
+
 
 
 })
