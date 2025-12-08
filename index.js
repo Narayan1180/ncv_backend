@@ -11,6 +11,11 @@ const flash = require("connect-flash");
 const cookieParser= require("cookie-parser")
 const jwt=require("jsonwebtoken")
 const app= express()
+
+const authRoutes=require("./routes/auth.route")
+const contatcRoutes=require("./routes/contact.route")
+const authmMiddleware= require("./middlewares/auth.middleware")
+
 const port=process.env.PORT||4000;
 
 app.use(express.urlencoded({ extended: true }));
@@ -43,6 +48,19 @@ mongoose.connect(process.env.MONGO_URL)
 .then(() => console.log("MongoDB connected"))
 .catch((err) => console.log("MongoDB connection error:", err));
 
+app.use("/",authRoutes)
+app.use("/contact",authmMiddleware,contatcRoutes)
+
+
+app.get("/",(req,res)=>{
+    token=req.cookies.token
+    if (token)
+        return res.redirect("/contact")
+    return res.redirect("/login");
+
+})
+
+app.listen(port,()=>{console.log(`app is listen to the ${port}`)})
 /*const u = new User({ name: "Aman", age: 20 });
 u.save();
 const v=new User({name:"Narayan",age:25})
@@ -66,6 +84,7 @@ app.get("/check-session", (req, res) => {
 });
 */
 
+/*
 app.get("/",(req,res)=>{
     res.redirect("/login")
 })
@@ -363,3 +382,5 @@ app.get("/name-api",async (req,res)=>{
 app.listen(port,()=>{
     console.log(`my app is listening to ${port}`)
 })
+
+*/
